@@ -1,0 +1,194 @@
+<view class="container">
+  <swiper class="goodsimgs" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
+    <!-- 商品轮播图片 -->
+    <swiper-item wx:for="{{goods.goodsGallery}}" wx:key="*this">
+      <image src="{{item}}" background-size="cover"></image>
+    </swiper-item>
+  </swiper>
+
+  <!-- 商品名称 -->
+  <view class='goods_name'>
+    <view class='goods_name_left'>{{goods.goodsName}}</view>
+  </view>
+
+  <!-- 商品价格 -->
+  <view class="goods-info">
+    <view class="c">
+      <text class="desc">{{goods.goodsBrief}}</text>
+      <view class="price">
+        <view class="counterPrice">原价：￥{{goods.goodsCounterPrice}}</view>
+        <view class="retailPrice">现价：￥{{goods.goodsRetailPrice}}</view>
+      </view>
+      <!-- 品牌商信息 -->
+      <view class="brand" wx:if="{{brand.brandName}}">
+        <navigator url="../brandDetail/brandDetail?id={{brand.brandId}}">
+          <text>{{brand.brandName}}</text>
+        </navigator>
+      </view>
+    </view>
+  </view>
+
+  <!-- 规格数量选择容器 -->
+  <view class="section-nav section-attr" bindtap="switchAttrPop">
+    <view class="t">{{checkedSpecText}}</view>
+    <van-icon class="i" name="arrow" />
+  </view>
+
+  <!-- 评论 -->
+  <view class="comments" wx:if="{{comment.length > 0}}">
+    <view class="h">
+      <navigator url="/pages/index/comment/comment?valueId={{comment.commentValueId}}&type=0">
+        <text class="t">评价({{comment.length >5  ? '99+' : comment.length}})</text>
+        <view class="i">
+          查看全部
+          <van-icon name="arrow" />
+        </view>
+      </navigator>
+    </view>
+    <view class="b">
+      <view class="item" wx:for="{{comment}}" wx:key="commentId">
+        <view class="info">
+          <view class="user">
+            <!-- 用户头像 -->
+            <image src="{{item.userAvatar}}"></image>
+            <!-- 用户昵称 -->
+            <text>{{item.userNickname}}</text>
+            <!-- 评价时间 -->
+          </view>
+          <view class="time">{{item.commentAddTime}}</view>
+        </view>
+        <view class="content">
+          <!-- 评价 -->
+          {{item.commentContent}}
+        </view>
+        <view class="imgs" wx:if="{{item.PicUrls.length > 0}}">
+          <image class="img" wx:for="{{item.PicUrls}}" wx:key="*this" wx:for-item="iitem" src="{{iitem}} "></image>
+        </view>
+        <view class="customer-service" wx:if="{{item.commentAdminContent}}">
+          <text class="u">商家回复：</text>
+          <text class="c">{{item.commentAdminContent}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品参数 -->
+  <view class="goods-attr">
+    <view class="t">商品参数</view>
+    <view class="l">
+      <view class="item" wx:for="{{attribute}}" wx:key="name">
+        <text class="left">{{item.attribute}}</text>
+        <text class="right">{{item.goodsAttributeValue}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 商品详情图片介绍 -->
+  <view class="detail">
+    <import src="/lib/wxParse/wxParse.wxml" />
+    <template is="wxParse" data="{{wxParseData:goodsDetail.nodes}}" />
+  </view>
+
+  <!-- 常见问题 -->
+  <view class="common-problem">
+    <view class="h">
+      <view class="line"></view>
+      <text class="title">常见问题</text>
+    </view>
+    <view class="b">
+      <view class="item" wx:for="{{issueList}}" wx:key="issueId">
+        <view class="question-box">
+          <text class="spot"></text>
+          <text class="question">{{item.issueQuestion}}</text>
+        </view>
+        <view class="answer">
+          {{item.issueAnswer}}
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 大家都在看 -->
+  <view class="related-goods" wx:if="{{relatedGoods.length > 0}}">
+    <view class="h">
+      <view class="line"></view>
+      <text class="title">大家都在看</text>
+    </view>
+    <view class="b">
+      <view class="item" wx:for="{{relatedGoods}}" wx:key="goodsId">
+        <navigator url="/pages/index/goods/goods?id={{item.goodsId}}">
+          <image class="img" src="{{item.goodsPicUrl}}" background-size="cover"></image>
+          <text class="name">{{item.goodsName}}</text>
+          <text class="price">￥{{item.goodsRetailPrice}}</text>
+        </navigator>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 规格选择界面 -->
+<view class="attr-pop-box" hidden="{{!openAttr}}">
+  <view class="attr-pop">
+    <view class="close" bindtap="closeAttr">
+      <van-icon class="icon" name="cross" />
+    </view>
+    <view class="img-info">
+      <!-- 商品图片 -->
+      <image class="img" src="{{tmpPicUrl}}"></image>
+      <view class="info">
+        <view class="c">
+          <!-- 商品价格 -->
+          <view class="p">价格：￥{{checkedSpecPrice}}</view>
+          <!-- 所选规格 -->
+          <view class="a">{{tmpSpecText}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 规格列表 -->
+    <view class="spec-con">
+      <view class="spec-item" wx:for="{{specificationList}}" wx:key="name">
+        <view class="name">{{item.name}}</view>
+        <view class="values">
+          <view class="value {{vitem.checked ? 'selected' : ''}}" bindtap="clickSkuValue" wx:for="{{item.goodsSpecifications}}"
+            wx:for-item="vitem" wx:key="id" data-value-id="{{vitem.goodsSpecificationId}}" data-name="{{vitem.goodsSpecificationValue}}">
+            {{vitem.goodsSpecificationValue}}</view>
+        </view>
+      </view>
+
+      <!-- 数量 -->
+    <view class="number-item">
+      <view class="name">数量</view>
+        <view class="selnum">
+          <view class="cut" bindtap="cutNumber">-</view>
+          <input value="{{number}}" class="number" disabled="true" type="number" />
+          <view class="add" bindtap="addNumber">+</view>
+      </view>
+    </view>
+
+    </view>
+  </view>
+</view>
+
+<!-- 联系客服 -->
+<view class="contact">
+  <contact-button style="opacity:0;position:absolute;" type="default-dark" session-from="weapp" size="27">
+  </contact-button>
+</view>
+
+<!-- 底部按钮 -->
+<view class="bottom-btn">
+  <view class="l l-collect" bindtap="addCollectOrNot" wx:if="{{!isGroupon}}">
+    <van-icon class="icon" name="star" color="#ab956d" wx:if="{{collect}}" />
+    <van-icon class="icon" name="star-o" wx:else />
+  </view>
+  <view class="l l-cart" wx:if="{{!isGroupon}}">
+    <view class="box">
+      <text class="cart-count">{{cartGoodsCount}}</text>
+      <van-icon bindtap="openCartPage" class="icon" name="cart-o" />
+    </view>
+  </view>
+  <view class="r" bindtap="addToCart" wx:if="{{!soldout}}" wx:if="{{!isGroupon}}">加入购物车</view>
+  <view class="c" bindtap="addFast" wx:if="{{!soldout}}">{{isGroupon?'参加团购':'立即购买'}}</view>
+  <view class="n" wx:if="{{soldout}}">商品已售空</view>
+</view>
