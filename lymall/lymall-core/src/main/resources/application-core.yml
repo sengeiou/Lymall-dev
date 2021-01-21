@@ -2,12 +2,12 @@
 tencent:
   config:
     #id
-    secretId: AKIDnpPr34alG8WO0NsXLxSRBl5hEerqs9Tm
+    secretId: 
     #key
-    secretKey: Q2QZyReKwO4iZYIneGchAON6ymKipiLj
+    secretKey: 
     #bucketName
-    bucketName: lymall-ahui-1304796949
+    bucketName: 
     #地域
-    regionName: ap-guangzhou
+    regionName: 
     #访问基础路径
-    baseUrl: https://lymall-ahui-1304796949.cos.ap-guangzhou.myqcloud.com
+    baseUrl: 
